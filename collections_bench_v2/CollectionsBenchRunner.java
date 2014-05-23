@@ -5,7 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.TreeSet;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.AbstractCollection;
+import java.util.Collection;
 
 
 public class CollectionsBenchRunner {
@@ -13,10 +13,10 @@ public class CollectionsBenchRunner {
     private static final int REPEAT_COUNT = 5;
 
     public static void doSingleBench(
-            final Map.Entry<String, AbstractCollection<Integer>> benchInfo,
+            final Map.Entry<String, Collection<Integer>> benchInfo,
             final int benchNumber) {
         String benchName = benchInfo.getKey().toString();
-        AbstractCollection<Integer> collection = benchInfo.getValue();
+        Collection<Integer> collection = benchInfo.getValue();
 
         BenchmarktTimer timer = new BenchmarktTimer();
 
@@ -41,13 +41,13 @@ public class CollectionsBenchRunner {
     public static void main(final String [] args) {
         System.out.println("Running Java collections benchmarks...");
 
-        LinkedHashMap<String, AbstractCollection<Integer>> benchMap;
-        benchMap = new LinkedHashMap<String, AbstractCollection<Integer>>();
+        LinkedHashMap<String, Collection<Integer>> benchMap;
+        benchMap = new LinkedHashMap<String, Collection<Integer>>();
 
         benchMap.put("LinkedList", new LinkedList<Integer>());
 
         /*ArrayList.remove(Object o) has O(N) complexity and can not
-        be directly compared using AbstractCollection interface with
+        be directly compared using Collection interface with
         other collections*/
         //benchMap.put("ArrayList", new ArrayList<Integer>());
 
@@ -55,7 +55,7 @@ public class CollectionsBenchRunner {
         benchMap.put("TreeSet", new TreeSet<Integer>());
         benchMap.put("HashSet", new HashSet<Integer>());
 
-        for (Map.Entry<String, AbstractCollection<Integer>> entry : benchMap.entrySet()) {
+        for (Map.Entry<String, Collection<Integer>> entry : benchMap.entrySet()) {
             String benchName = entry.getKey();
             System.out.println(String.format("Running benchmark %s ...", benchName));
             for (int i = 1; i <= REPEAT_COUNT; ++i) {

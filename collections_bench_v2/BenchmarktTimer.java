@@ -1,6 +1,6 @@
 public class BenchmarktTimer {
     private long startTime;
-    private final double timerPrecision;
+    private static final double TIMER_PRECISION = 1000000000.0;
 
     public final void start() {
         startTime = System.nanoTime();
@@ -9,6 +9,6 @@ public class BenchmarktTimer {
         return System.nanoTime() - startTime;
     }
     public static double toSeconds(final long timeInNanoseconds) {
-        return timeInNanoseconds / timerPrecision;
+        return timeInNanoseconds / TIMER_PRECISION;
     }
 }
