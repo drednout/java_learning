@@ -1,4 +1,4 @@
-public class BenchmarktTimer {
+public class BenchmarkTimer {
     private long startTime;
     private static final double TIMER_PRECISION = 1000000000.0;
 

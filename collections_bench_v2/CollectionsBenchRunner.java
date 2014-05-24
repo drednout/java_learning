@@ -14,28 +14,43 @@ public class CollectionsBenchRunner {
 
     public static void doSingleBench(
             final Map.Entry<String, Collection<Integer>> benchInfo,
-            final int benchNumber) {
+            final int benchNumber,
+            final ArrayList<BenchmarkResult> benchResults) {
         String benchName = benchInfo.getKey().toString();
         Collection<Integer> collection = benchInfo.getValue();
 
-        BenchmarktTimer timer = new BenchmarktTimer();
+        BenchmarkTimer timer = new BenchmarkTimer();
 
         timer.start();
         for (int i = 0; i < ITERATION_COUNT; ++i) {
             collection.add(i);
         }
         long timeEstimate = timer.stop();
-        System.out.println(BenchmarkHelper.formatBenchResult(String.format("%s:add", benchName),
-                           ITERATION_COUNT, benchNumber, timer.toSeconds(timeEstimate)));
+
+        BenchmarkResult benchResult;
+        String subBenchName = String.format("%s:add", benchName);
+        benchResult = new BenchmarkResult(
+                          subBenchName,
+                          ITERATION_COUNT,
+                          benchNumber,
+                          timeEstimate
+                      );
+        benchResults.add(benchResult);
 
         timer.start();
         for (int i = 0; i < ITERATION_COUNT; ++i) {
             collection.remove(i);
         }
         timeEstimate = timer.stop();
-        System.out.println(BenchmarkHelper.formatBenchResult(String.format("%s:remove", benchName),
-                           ITERATION_COUNT, benchNumber, timer.toSeconds(timeEstimate)));
 
+        subBenchName = String.format("%s:remove", benchName);
+        benchResult = new BenchmarkResult(
+                          subBenchName,
+                          ITERATION_COUNT,
+                          benchNumber,
+                          timeEstimate
+                      );
+        benchResults.add(benchResult);
     }
 
     public static void main(final String [] args) {
@@ -43,6 +58,9 @@ public class CollectionsBenchRunner {
 
         LinkedHashMap<String, Collection<Integer>> benchMap;
         benchMap = new LinkedHashMap<String, Collection<Integer>>();
+
+        ArrayList<BenchmarkResult> benchResults;
+        benchResults = new ArrayList<BenchmarkResult>();
 
         benchMap.put("LinkedList", new LinkedList<Integer>());
 
@@ -59,8 +77,11 @@ public class CollectionsBenchRunner {
             String benchName = entry.getKey();
             System.out.println(String.format("Running benchmark %s ...", benchName));
             for (int i = 1; i <= REPEAT_COUNT; ++i) {
-                doSingleBench(entry, i);
+                doSingleBench(entry, i, benchResults);
             }
+        }
+        for (BenchmarkResult benchResult : benchResults) {
+            System.out.println(benchResult.toString());
         }
         System.out.println("Done.");
     }
