@@ -1,3 +1,3 @@
 #!/bin/sh
 
-javac -Xlint:unchecked BenchmarkResult.java BenchmarkTimer.java CollectionsBenchRunner.java 
+javac -Xlint:unchecked BenchmarkHelper.java BenchmarkResult.java BenchmarkTimer.java CollectionsBenchRunner.java 
