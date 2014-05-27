@@ -18,10 +18,14 @@ public class Jcp {
                 out.write(buf, 0, num_bytes);
             }
         } finally {
-            if (in != null)
-                in.close();
-            if (out != null)
-                out.close();
+            try {
+                if (in != null)
+                    in.close();
+            }
+            finally {
+                if (out != null)
+                    out.close();
+            }
         }
     }
 
