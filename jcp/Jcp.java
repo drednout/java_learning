@@ -20,13 +20,21 @@ public class Jcp {
         }
     }
 
-    public static void main(String[] args) 
-    throws IOException {
+    public static void main(String[] args) {
         if(args.length < 2) {
             System.out.println("Usage:");
             System.out.println("    java Jcp input_file output_file\n");
             System.exit(1);
         }
-        copyFileContent(args[0], args[1]);
+        try {
+            copyFileContent(args[0], args[1]);
+        } catch (FileNotFoundException e) {
+            System.err.println(e);
+            System.exit(1);
+        } catch (IOException e) {
+            System.err.println(e);
+            System.exit(1);
+        }
+        System.exit(0);
     }
 }
