@@ -9,11 +9,8 @@ public class Jcp {
         FileOutputStream out = new FileOutputStream(output_file);
         
         byte buf[] = new byte[BUF_SIZE]; 
-        while (true) {
-            int num_bytes = in.read(buf);
-            if (num_bytes == -1) {
-                break;
-            }
+        int num_bytes = 0;
+        while ( (num_bytes = in.read(buf)) != -1 ) {
             out.write(buf, 0, num_bytes);
         } 
     }
