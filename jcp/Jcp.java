@@ -7,12 +7,17 @@ public class Jcp {
     throws IOException {
         FileInputStream in = new FileInputStream(input_file);
         FileOutputStream out = new FileOutputStream(output_file);
-        
-        byte buf[] = new byte[BUF_SIZE]; 
-        int num_bytes = 0;
-        while ( (num_bytes = in.read(buf)) != -1 ) {
-            out.write(buf, 0, num_bytes);
-        } 
+
+        try {
+            byte buf[] = new byte[BUF_SIZE]; 
+            int num_bytes = 0;
+            while ( (num_bytes = in.read(buf)) != -1 ) {
+                out.write(buf, 0, num_bytes);
+            }
+        } finally {
+            in.close();
+            out.close();
+        }
     }
 
     public static void main(String[] args) 
