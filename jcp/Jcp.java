@@ -5,18 +5,23 @@ public class Jcp {
 
     public static void copyFileContent(String input_file, String output_file) 
     throws IOException {
-        FileInputStream in = new FileInputStream(input_file);
-        FileOutputStream out = new FileOutputStream(output_file);
+        FileInputStream in = null;
+        FileOutputStream out = null;
 
         try {
+            in = new FileInputStream(input_file);
+            out = new FileOutputStream(output_file);
+
             byte buf[] = new byte[BUF_SIZE]; 
             int num_bytes = 0;
             while ( (num_bytes = in.read(buf)) != -1 ) {
                 out.write(buf, 0, num_bytes);
             }
         } finally {
-            in.close();
-            out.close();
+            if (in != null)
+                in.close();
+            if (out != null)
+                out.close();
         }
     }
 
