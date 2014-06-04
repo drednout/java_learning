@@ -6,7 +6,7 @@ public class MySqlDaoFactory implements DaoFactory {
     //TODO: get connection credentials from config
 
     private String user = "monstrillo";
-    private String password = "frygvzvu";
+    private String password = "SECRET";
     private String url = "jdbc:mysql://localhost:3306/java_db";
     private String driver = "com.mysql.jdbc.Driver";
 
