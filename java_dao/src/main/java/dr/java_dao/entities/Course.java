@@ -51,4 +51,10 @@ public class Course {
     public void setUpdated(Date d) {
         this.updated = d;
     }
+
+    public String toString() {
+        String out = String.format("Course<name: %s, duration: %s>", 
+                                   name, duration);
+        return out;
+    }
 }
