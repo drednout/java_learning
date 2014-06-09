@@ -15,7 +15,7 @@ public class Student {
         Male, Female
     }
 
-    private Integer id;
+    private Integer id = null;
     private String name;
     private Sex sex;
     private Date birthDate;
@@ -23,12 +23,6 @@ public class Student {
     private Date updated;
 
     public Student() {
-        id = null;
-        name = null;
-        sex = null;
-        birthDate = null;
-        created = null;
-        updated = null;
     }
 
     public Student(Student another) {
