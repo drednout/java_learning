@@ -15,12 +15,30 @@ public class Student {
         Male, Female
     }
 
-    private Integer id = null;
+    private Integer id;
     private String name;
     private Sex sex;
     private Date birthDate;
     private Date created;
     private Date updated;
+
+    public Student() {
+        id = null;
+        name = null;
+        sex = null;
+        birthDate = null;
+        created = null;
+        updated = null;
+    }
+
+    public Student(Student another) {
+        this.id = another.id;
+        this.name = another.name;
+        this.sex = another.sex;
+        this.birthDate = another.birthDate;
+        this.created = another.created;
+        this.updated = another.updated;
+    }
 
     public Integer getId() {
         return id;
@@ -97,5 +115,20 @@ public class Student {
         String out = String.format("Student<name: %s, sex: %s, birthDate: %s>", 
                                    name, sex, birthDate);
         return out;
+    }
+    @Override
+    public boolean equals(Object other){
+        if (other == null) return false;
+        if (other == this) return true;
+        if (!(other instanceof Student)) return false;
+
+        
+        Student otherStudent = (Student)other;
+        if (!otherStudent.id.equals(this.id)) return false;
+        if (!otherStudent.name.equals(this.name)) return false;
+        if (!otherStudent.sex.equals(this.sex)) return false;
+        if (!otherStudent.birthDate.equals(this.birthDate)) return false;
+
+        return true;
     }
 }

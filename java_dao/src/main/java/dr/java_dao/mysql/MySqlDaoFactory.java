@@ -12,10 +12,16 @@ import dr.java_dao.dao.CourseDao;
 public class MySqlDaoFactory implements DaoFactory {
     //TODO: get connection credentials from config
 
-    private String user = "monstrillo";
-    private String password = "SECRET";
-    private String url = "jdbc:mysql://localhost:3306/java_db";
+    private String user = null;
+    private String password = null;
+    private String url = null;
     private String driver = "com.mysql.jdbc.Driver";
+
+    public MySqlDaoFactory(String user, String password, String url) {
+        this.user = user;
+        this.password = password;
+        this.url = url;
+    }
 
     public Connection getConnection() throws DaoException {
         Connection connection = null;
