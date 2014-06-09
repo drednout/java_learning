@@ -1,4 +1,4 @@
-package dr.java_dao.dao;
+package dr.javadao.dao;
 
 public class DaoException extends Exception {
 

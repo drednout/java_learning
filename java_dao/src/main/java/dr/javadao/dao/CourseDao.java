@@ -1,6 +1,6 @@
-package dr.java_dao.dao;
+package dr.javadao.dao;
 
-import dr.java_dao.entities.Course;
+import dr.javadao.entities.Course;
 
 
 public interface CourseDao {

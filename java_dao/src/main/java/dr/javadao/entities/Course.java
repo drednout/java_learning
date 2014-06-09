@@ -1,4 +1,4 @@
-package dr.java_dao.entities;
+package dr.javadao.entities;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -1,9 +1,9 @@
-package dr.java_dao.entities;
+package dr.javadao.entities;
 
 //see http://www.dokwork.ru/2014/02/daotalk.html
 import java.io.Serializable;
 import java.util.Date;
-import dr.java_dao.dao.DaoException;
+import dr.javadao.dao.DaoException;
 
 
 
