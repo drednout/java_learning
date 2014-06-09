@@ -1,13 +1,16 @@
+package dr.java_dao.entities;
+
 //see http://www.dokwork.ru/2014/02/daotalk.html
 import java.io.Serializable;
 import java.util.Date;
+import dr.java_dao.dao.DaoException;
 
 
 
 /**
  * Объектное представление сущности Студент.
  */
-public class Student implements Identified<Integer> {
+public class Student {
     public enum Sex {
         Male, Female
     }
@@ -23,7 +26,7 @@ public class Student implements Identified<Integer> {
         return id;
     }
 
-    protected void setId(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 

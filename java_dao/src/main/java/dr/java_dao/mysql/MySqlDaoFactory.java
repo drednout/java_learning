@@ -1,6 +1,13 @@
+package dr.java_dao.mysql;
+
 //see http://www.dokwork.ru/2014/02/daotalk.html
 import java.sql.Connection;
 import java.sql.DriverManager;
+
+import dr.java_dao.dao.DaoException;
+import dr.java_dao.dao.DaoFactory;
+import dr.java_dao.dao.StudentDao;
+import dr.java_dao.dao.CourseDao;
 
 public class MySqlDaoFactory implements DaoFactory {
     //TODO: get connection credentials from config

@@ -1,3 +1,8 @@
+package dr.java_dao.dao;
+
+import dr.java_dao.entities.Course;
+
+
 public interface CourseDao {
 
     public int insertCourse(Course course);

@@ -2,6 +2,10 @@ import java.sql.Connection;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
+import dr.java_dao.mysql.MySqlDaoFactory;
+import dr.java_dao.entities.Student;
+import dr.java_dao.dao.StudentDao;
+
 
 public class DaoTest {
     public static void main(String[] args) throws Exception {

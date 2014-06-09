@@ -1,3 +1,5 @@
+package dr.java_dao.mysql;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -5,6 +7,12 @@ import java.sql.ResultSet;
 import java.sql.Date;
 import java.util.List;
 import java.util.LinkedList;
+
+import dr.java_dao.dao.DaoException;
+import dr.java_dao.dao.DaoFactory;
+import dr.java_dao.dao.StudentDao;
+import dr.java_dao.entities.Student;
+
 
 public class MySqlStudentDao implements
         StudentDao {

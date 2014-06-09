@@ -1,7 +1,9 @@
+package dr.java_dao.entities;
+
 import java.io.Serializable;
 import java.util.Date;
 
-public class Course implements Identified<Integer> {
+public class Course {
 
     private Integer id = null;
     private String name;
@@ -13,7 +15,7 @@ public class Course implements Identified<Integer> {
         return id;
     }
 
-    protected void setId(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 

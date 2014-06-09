@@ -1,4 +1,9 @@
+package dr.java_dao.dao;
+
 import java.util.Date;
+
+import dr.java_dao.entities.Student;
+
 
 public interface StudentDao {
 

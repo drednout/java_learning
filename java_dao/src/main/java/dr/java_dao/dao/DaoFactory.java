@@ -1,3 +1,4 @@
+package dr.java_dao.dao;
 // See http://javatutor.net/articles/j2ee-pattern-data-access-object
 // Абстрактный класс DAO Factory
 //
