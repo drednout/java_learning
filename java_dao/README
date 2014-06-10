@@ -1,6 +1,2 @@
-For test execution you must specify PROJECT_ROOT 
-environment variable equals to full path to directory where
-this project is placed.
-
-Also you need to copy test.properties.example to test.properties and
-specify your MySQL connection parameters.
+For running unit tests you need to copy src/test/resources/test.properties.example to 
+src/test/resources/test.properties and specify your MySQL connection parameters.

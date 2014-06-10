@@ -91,7 +91,7 @@
                     </goals>
                     <configuration>
                       <files>
-                        <file>test.properties</file>
+                          <file>src/test/resources/test.properties</file>
                       </files>
                     </configuration>
                   </execution>

@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.io.InputStream;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,18 +33,17 @@ public class DaoSmokeTest {
     private static String password;
     private static String url;
 
-    static {
-        String projectRoot = System.getenv().get("PROJECT_ROOT");
-        if (projectRoot == null) {
-            System.err.println("ERROR: you must set PROJECT_ROOT environment variable");
+
+    public DaoSmokeTest() {
+        InputStream io = this.getClass().getClassLoader().getResourceAsStream(propertyFile);
+        if (io == null) {
+            System.err.println("ERROR: Unable to find property file: " + propertyFile);
             System.exit(1);
         }
 
         Properties properties = new Properties();
-        String propertyPath = projectRoot + "/" + propertyFile;
-
         try {
-            properties.load(new FileInputStream(propertyFile));
+            properties.load(io);
         } catch (IOException e) {
             System.err.println("ERROR: Unable to find property file: " + propertyFile);
             System.exit(1);
