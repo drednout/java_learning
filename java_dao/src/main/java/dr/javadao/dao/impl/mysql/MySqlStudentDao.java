@@ -15,13 +15,18 @@ import dr.javadao.entities.Student;
 
 
 public class MySqlStudentDao implements
-        StudentDao {
+        StudentDao, AutoCloseable {
 
     private Connection connection;
+    private PreparedStatement insertStatement = null;
+    private PreparedStatement updateStatement = null;
+    private PreparedStatement deleteStatement = null;
+    private PreparedStatement selectOneStatement = null;
+    private Boolean isClosed = false;
 
     private String getSelectQuery() {
         return "SELECT id, name, sex, birth_date, created, updated FROM "
-               + "students ";
+               + "students WHERE id=?";
     }
 
     private String getCreateQuery() {
@@ -58,10 +63,11 @@ public class MySqlStudentDao implements
         return result;
     }
 
+    
+
     private void prepareStatementForInsert(PreparedStatement statement, 
             Student object) throws DaoException {
         try {
-            //TODO: what can we do with magic numbers 1, 2, 3??
             statement.setString(1, object.getName());
             statement.setString(2, object.getSexString());
 
@@ -110,21 +116,29 @@ public class MySqlStudentDao implements
         return new java.sql.Date(date.getTime());
     }
 
-    public MySqlStudentDao(Connection connection) {
+    public MySqlStudentDao(Connection connection) throws DaoException {
         this.connection = connection;
+        try {
+            insertStatement = connection.prepareStatement(getCreateQuery(), 
+                                    Statement.RETURN_GENERATED_KEYS);
+            updateStatement = connection.prepareStatement(getUpdateQuery());
+            deleteStatement = connection.prepareStatement(getDeleteQuery());
+            selectOneStatement = connection.prepareStatement(getSelectQuery());
+        } catch (Exception e) {
+            releaseStatements();
+            throw new DaoException(e);
+        }
     }
 
     public int insertStudent(Student student) throws DaoException {
-        String sql = getCreateQuery();
         Integer studentId = -1;
         ResultSet generatedKeys = null;
 
-        try (PreparedStatement statement = connection.prepareStatement(sql, 
-                Statement.RETURN_GENERATED_KEYS)) {
-            prepareStatementForInsert(statement, student);
-            statement.executeUpdate();
+        try {
+            prepareStatementForInsert(insertStatement, student);
+            insertStatement.executeUpdate();
 
-            generatedKeys = statement.getGeneratedKeys();
+            generatedKeys = insertStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
                 studentId = generatedKeys.getInt(1);
                 student.setId(studentId);
@@ -146,9 +160,9 @@ public class MySqlStudentDao implements
     public void updateStudent(Student student) throws DaoException {
         String sql = getUpdateQuery();
 
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            prepareStatementForUpdate(statement, student);
-            statement.executeUpdate();
+        try {
+            prepareStatementForUpdate(updateStatement, student);
+            updateStatement.executeUpdate();
         } catch (Exception e) {
             throw new DaoException(e);
         }
@@ -156,21 +170,19 @@ public class MySqlStudentDao implements
     public void deleteStudent(Student student) throws DaoException {
         String sql = getDeleteQuery();
 
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            prepareStatementForDelete(statement, student);
-            statement.executeUpdate();
+        try {
+            prepareStatementForDelete(deleteStatement, student);
+            deleteStatement.executeUpdate();
         } catch (Exception e) {
             throw new DaoException(e);
         }
     }
     public Student selectStudent(int studentId) throws DaoException {
         List<Student> list;
-        String sql = getSelectQuery();
         ResultSet rs = null;
-        sql += " WHERE id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, studentId);
-            rs = statement.executeQuery();
+        try {
+            selectOneStatement.setInt(1, studentId);
+            rs = selectOneStatement.executeQuery();
             list = parseResultSet(rs);
         } catch (Exception e) {
             throw new DaoException(e);
@@ -192,5 +204,42 @@ public class MySqlStudentDao implements
             throw new DaoException("Broken primary key for student " + studentId);
         }
         return list.iterator().next();
+    }
+
+    private void releaseStatements() throws DaoException {
+        LinkedList<Exception> exceptions = new LinkedList<Exception>();
+        try {
+            if (insertStatement != null) insertStatement.close();
+        } catch(Exception e) {
+            exceptions.add(e);
+        }
+        try {
+            if (updateStatement != null) updateStatement.close();
+        } catch(Exception e) {
+            exceptions.add(e);
+        }
+        try {
+            if (deleteStatement != null) deleteStatement.close();
+        } catch(Exception e) {
+            exceptions.add(e);
+        }
+        try {
+            if (selectOneStatement != null) selectOneStatement.close();
+        } catch(Exception e) {
+            exceptions.add(e);
+        }
+
+        if (exceptions.size() > 0) {
+            //here we loose some information about all exceptions, but
+            //all resources are released:)
+            throw new DaoException(exceptions.iterator().next());
+        }
+    }
+
+
+    public void close() throws Exception {
+        if (isClosed) return;
+        
+        releaseStatements();
     }
 }

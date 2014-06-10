@@ -62,6 +62,7 @@ public class DaoSmokeTest {
     @After
     public void tearDown() throws Exception {
         factory.close();
+        studentDao.close();
     }
 
     private Student createOneStudent(String name)
