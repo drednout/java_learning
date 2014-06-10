@@ -117,19 +117,28 @@ public class MySqlStudentDao implements
     public int insertStudent(Student student) throws DaoException {
         String sql = getCreateQuery();
         Integer studentId = -1;
+        ResultSet generatedKeys = null;
 
         try (PreparedStatement statement = connection.prepareStatement(sql, 
                 Statement.RETURN_GENERATED_KEYS)) {
             prepareStatementForInsert(statement, student);
             statement.executeUpdate();
 
-            ResultSet generatedKeys = statement.getGeneratedKeys();
+            generatedKeys = statement.getGeneratedKeys();
             if (generatedKeys.next()) {
                 studentId = generatedKeys.getInt(1);
                 student.setId(studentId);
             }
         } catch (Exception e) {
             throw new DaoException(e);
+        } finally {
+            try {
+                if (generatedKeys != null) {
+                    generatedKeys.close();
+                }
+            } catch (Exception e) {
+                throw new DaoException(e);
+            }
         }
 
         return studentId;
@@ -157,14 +166,24 @@ public class MySqlStudentDao implements
     public Student selectStudent(int studentId) throws DaoException {
         List<Student> list;
         String sql = getSelectQuery();
+        ResultSet rs = null;
         sql += " WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, studentId);
-            ResultSet rs = statement.executeQuery();
+            rs = statement.executeQuery();
             list = parseResultSet(rs);
         } catch (Exception e) {
             throw new DaoException(e);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+                throw new DaoException(e);
+            }
         }
+
         if (list == null || list.size() == 0) {
             return null;
         }
