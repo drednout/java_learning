@@ -9,37 +9,44 @@ import dr.javadao.dao.DaoFactory;
 import dr.javadao.dao.StudentDao;
 import dr.javadao.dao.CourseDao;
 
-public class MySqlDaoFactory implements DaoFactory {
+public class MySqlDaoFactory implements DaoFactory, AutoCloseable  {
     //TODO: get connection credentials from config
 
     private String user = null;
     private String password = null;
     private String url = null;
     private String driver = "com.mysql.jdbc.Driver";
+    private Connection connection = null;
+    private Boolean doRollbackWhenClosing = false;
+    private Boolean isOpened = false;
 
-    public MySqlDaoFactory(String user, String password, String url) {
+    public MySqlDaoFactory(String user, String password, String url) 
+            throws DaoException {
         this.user = user;
         this.password = password;
         this.url = url;
+        this.connection = getConnection();
     }
 
-    public Connection getConnection() throws DaoException {
+    private Connection getConnection() throws DaoException {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(url, user, password);
         } catch (Exception e) {
             throw new DaoException(e);
         }
+        isOpened = true;
+
         return connection;
     }
 
     @Override
-    public StudentDao getStudentDao(Connection connection) {
+    public StudentDao getStudentDao() {
         return new MySqlStudentDao(connection);
     }
 
     @Override
-    public CourseDao getCourseDao(Connection connection) {
+    public CourseDao getCourseDao() {
         //TODO: implementation
         return null;
     }
@@ -49,6 +56,29 @@ public class MySqlDaoFactory implements DaoFactory {
             Class.forName(driver); //Регистрируем драйвер
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void setAutoCommit(Boolean flag) throws DaoException {
+        try {
+            connection.setAutoCommit(flag);
+        } catch (Exception e) {
+            throw new DaoException(e);
+        }
+    }
+
+    public void setDoRollbackWhenClosing(Boolean flag) {
+        doRollbackWhenClosing = flag;
+    }
+
+
+    public void close() throws Exception {
+        if (doRollbackWhenClosing) {
+            connection.rollback();
+        }
+        if (isOpened) {
+            connection.close();
+            isOpened = false;
         }
     }
 }

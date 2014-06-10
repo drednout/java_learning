@@ -23,8 +23,6 @@ import dr.javadao.dao.DaoException;
 
 public class DaoSmokeTest {
 
-    private Connection connection;
-
     private static MySqlDaoFactory factory;
     private StudentDao studentDao;
     private static final String testStudentName = "test student";
@@ -56,15 +54,14 @@ public class DaoSmokeTest {
     @Before
     public void setUp() throws DaoException, SQLException, IOException {
         factory = new MySqlDaoFactory(user, password, url);
-        connection = factory.getConnection();
-        connection.setAutoCommit(false);
-        studentDao = factory.getStudentDao(connection);
+        factory.setAutoCommit(false);
+        factory.setDoRollbackWhenClosing(true);
+        studentDao = factory.getStudentDao();
     }
 
     @After
-    public void tearDown() throws SQLException {
-        connection.rollback();
-        connection.close();
+    public void tearDown() throws Exception {
+        factory.close();
     }
 
     private Student createOneStudent(String name)
