@@ -8,6 +8,7 @@ import dr.javadao.dao.DaoException;
 import dr.javadao.dao.DaoFactory;
 import dr.javadao.dao.StudentDao;
 import dr.javadao.dao.CourseDao;
+import dr.javadao.dao.StudentCourseDao;
 
 public class MySqlDaoFactory implements DaoFactory, AutoCloseable  {
     //TODO: get connection credentials from config
@@ -41,14 +42,18 @@ public class MySqlDaoFactory implements DaoFactory, AutoCloseable  {
     }
 
     @Override
-    public StudentDao getStudentDao() {
+    public StudentDao getStudentDao() throws DaoException {
         return new MySqlStudentDao(connection);
     }
 
     @Override
-    public CourseDao getCourseDao() {
-        //TODO: implementation
-        return null;
+    public CourseDao getCourseDao() throws DaoException {
+        return new MySqlCourseDao(connection);
+    }
+
+    @Override
+    public StudentCourseDao getStudentCourseDao() throws DaoException {
+        return new MySqlStudentCourseDao(connection);
     }
 
     public MySqlDaoFactory() {

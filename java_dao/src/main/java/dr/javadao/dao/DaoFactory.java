@@ -4,11 +4,16 @@ package dr.javadao.dao;
 //
 import java.sql.Connection;
 
+import dr.javadao.dao.DaoException;
+
 public interface DaoFactory {
 
   // Здесь будет метод для каждого DAO, который может быть
   // создан. Реализовывать эти методы
   // должны конкретные генераторы.
-  public StudentDao getStudentDao();
-  public CourseDao getCourseDao();
+  
+  public StudentDao getStudentDao() throws DaoException;
+  public CourseDao getCourseDao() throws DaoException;
+
+  public StudentCourseDao getStudentCourseDao() throws DaoException;
 }
